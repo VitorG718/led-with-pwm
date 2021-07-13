@@ -12,3 +12,6 @@ SourceFiles=..\Src\main.c;..\Src\gpio.c;..\Src\tim.c;..\Src\usart.c;..\Src\stm32
 HeaderPath=..\Drivers\STM32L0xx_HAL_Driver\Inc;..\Drivers\STM32L0xx_HAL_Driver\Inc\Legacy;..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\Drivers\CMSIS\Include;..\Inc;
 CDefines=USE_HAL_DRIVER;STM32L053xx;USE_HAL_DRIVER;USE_HAL_DRIVER;
 
+[]
+SourceFiles=;;
+

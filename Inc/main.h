@@ -70,12 +70,6 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define red_Pin GPIO_PIN_10
-#define red_GPIO_Port GPIOC
-#define blue_Pin GPIO_PIN_11
-#define blue_GPIO_Port GPIOC
-#define green_Pin GPIO_PIN_12
-#define green_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

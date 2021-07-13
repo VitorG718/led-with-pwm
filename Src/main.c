@@ -51,6 +51,11 @@ typedef struct {
 }BitField;
 
 BitField counter;
+uint16_t manualDelay = 0;
+
+uint8_t redCode = 159;
+uint8_t greenCode = 135;
+uint8_t blueCode = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,13 +100,17 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_GPIO_WritePin(red_GPIO_Port, red_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(green_GPIO_Port, green_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(blue_GPIO_Port, blue_Pin, GPIO_PIN_RESET);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 	
-	TIM2 -> CCR1 = 0;
+	(*TIM2).CCR1 = 0;
 	counter.counterMode = 1;
+	
+	TIM2 -> CCR2 = redCode;
+	TIM2 -> CCR3 = greenCode;
+	TIM2 -> CCR4 = blueCode;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -121,7 +130,7 @@ int main(void)
 		if(TIM2 -> CCR1 == 0) {
 			counter.counterMode = 1;
 		} 
-		if (TIM2 -> CCR1 > 99) {
+		if (TIM2 -> CCR1 > 255) {
 			counter.counterMode = 0;
 		}
   }
