@@ -36,6 +36,12 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define IR 0
+#define DR 1
+#define IG 2
+#define DG 3
+#define IB 4
+#define DB 5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,11 +57,11 @@ typedef struct {
 }BitField;
 
 BitField counter;
-uint16_t manualDelay = 0;
+uint8_t statusRGB;
 
-uint8_t redCode = 159;
-uint8_t greenCode = 135;
-uint8_t blueCode = 0;
+// uint8_t redCode = 0;
+// uint8_t greenCode = 0;
+// uint8_t blueCode = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,12 +111,13 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 	
-	(*TIM2).CCR1 = 0;
+	TIM2 -> CCR1 = 0;
 	counter.counterMode = 1;
 	
-	TIM2 -> CCR2 = redCode;
-	TIM2 -> CCR3 = greenCode;
-	TIM2 -> CCR4 = blueCode;
+	TIM2 -> CCR2 = 255;
+	TIM2 -> CCR3 = 0;
+	TIM2 -> CCR4 = 0;
+	statusRGB = IG;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,7 +127,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_Delay(50);
+		HAL_Delay(2);
 		if (counter.counterMode == 1) {
 				TIM2 -> CCR1 += 1;
 		} else {
@@ -133,6 +140,42 @@ int main(void)
 		if (TIM2 -> CCR1 > 255) {
 			counter.counterMode = 0;
 		}
+		
+		switch(statusRGB) {
+			case IR:
+				TIM2 -> CCR2 ++;
+				break;
+			case DR:
+				TIM2 -> CCR2 --;
+				break;
+			case IG:
+				TIM2 -> CCR3 ++;
+				break;
+			case DG:
+				TIM2 -> CCR3 --;
+				break;
+			case IB:
+				TIM2 -> CCR4 ++;
+				break;
+			case DB:
+				TIM2 -> CCR4 --;
+				break;
+		}
+		
+		if(TIM2 -> CCR3 == 255 && statusRGB == IG) {
+			statusRGB = DR;
+		} else if(TIM2 -> CCR2 == 0 && statusRGB == DR) {
+			statusRGB = IB;
+		} else if(TIM2 -> CCR4 == 255 && statusRGB == IB) {
+			statusRGB = DG;
+		} else if(TIM2 -> CCR3 == 0 && statusRGB == DG) {
+			statusRGB = IR;
+		} else if(TIM2 -> CCR2 == 255 && statusRGB == IR) {
+			statusRGB = DB;
+		} else if(TIM2 -> CCR4 == 0 && statusRGB == DB) {
+			statusRGB = IG;
+		}
+		
   }
   /* USER CODE END 3 */
 }
